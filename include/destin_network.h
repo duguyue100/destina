@@ -23,6 +23,7 @@ public:
     /* sparse autoencoder */
 
     vector<SparseAE::SA> dict;
+    vector<Mat> feature;
 
 public:
     DestinNetwork()
@@ -39,6 +40,64 @@ public:
     {
         nLayer=nlayer;
         dictSize=DictSize;
+        initFeature(feature, nLayer);
+    }
+
+    /*
+     * Function: this function initialize features for each layer.
+     *           there are different methods available,
+     *           currently, the simplest method is implemented.
+     *
+     * f: features are going to be initialized.
+     *
+     */
+    void initFeature(vector<cv::Mat> & f, int nlayer)
+    {
+        for (int i=0; i<nlayer; i++)
+        {
+            int nNodes=0;
+            calNodesInLayer(i, nNodes);
+            cv::Mat temp;
+            createInitNodesSimple(nNodes, i, temp);
+            f.push_back(temp);
+            temp.release();
+        }
+    }
+
+    /*
+     * Function: this function calculates number of nodes given
+     *           a layer.
+     *
+     * INPUT
+     * layer : given layer.
+     *
+     * OUTPUT
+     * nnodes : number of nodes which belongs to such layer.
+     */
+    void calNodesInLayer(int layer, int & nnodes)
+    {
+        int exp=nLayer-2*layer+2;
+
+        nnodes=(int)pow(2.0, (double)exp);
+    }
+
+    /*
+     * Function: this function calculates the initialization of the nodes
+     *           here the simplest method is implemented.
+     *
+     * INPUT
+     * nnodes : number of nodes in such layer.
+     * layer  : given layer.
+     *
+     * OUTPUT
+     * initf  : initial setting for the layer, each column is a sample.
+     */
+    void createInitNodesSimple(int nnodes, int layer, cv::Mat & initf)
+    {
+        int ds=dictSize[layer];
+        double p=1.0/(double)ds;
+
+        initf=Mat::ones(ds, nnodes, CV_64FC1)*p;
     }
 
     /*

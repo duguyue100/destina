@@ -55,17 +55,17 @@ This project is developed under Ubuntu 12.04.3 and Mac OS X.
 
 1. Example of Gabor Wavelet dictionary
 
-   ![Gabor Wavelet Dictionary](/cpp/resources/gabor_dictionary_32_32.png)
+   ![Gabor Wavelet Dictionary](/resources/gabor_dictionary_32_32.png)
 
 2. Example of Whitened Image
 
-   ![Whitened Image](/cpp/resources/whitening.png)
+   ![Whitened Image](/resources/whitening.png)
 
 3. In C++ implementation, can only learn some representations roughly. However the performance is not acceptable, still need to figure out it's dictionary's problem or implementation's problem. Furthermore, the speed is not acceptable for now.
 
 4. Example of reconstruction image with sparse autoencoder
 
-   ![Sparse Autoencoder Reconstruction](/cpp/resources/sparse_autoencoder_reconstruction.png)
+   ![Sparse Autoencoder Reconstruction](/resources/sparse_autoencoder_reconstruction.png)
 
 ##Contacts##
 

@@ -41,6 +41,11 @@ public:
         nLayer=nlayer;
         dictSize=DictSize;
         initFeature(feature, nLayer);
+        for (int i=0; i<nLayer; i++)
+        {
+            SparseAE::SA temp;
+            dict.push_back(temp);
+        }
     }
 
     /*
@@ -122,10 +127,10 @@ public:
         for (int i=0; i<sideNewLength; i++)
             for (int j=0; j<sideNewLength; j++)
             {
-                cv::Mat temp=in.col((2*i-2)*sideOldLength+(2*j-1));
-                temp.push_back(in.col((2*i-2)*sideOldLength+(2*j)));
-                temp.push_back(in.col((2*i-1)*sideOldLength+(2*j-1)));
-                temp.push_back(in.col((2*i-1)*sideOldLength+(2*j)));
+                cv::Mat temp=in.col((2*i)*sideOldLength+(2*j));
+                temp.push_back(in.col((2*i)*sideOldLength+(2*j+1)));
+                temp.push_back(in.col((2*i+1)*sideOldLength+(2*j)));
+                temp.push_back(in.col((2*i+1)*sideOldLength+(2*j+1)));
 
                 if (i*sideNewLength+j!=0) cv::hconcat(out, temp, out);
                 else out=temp;
@@ -176,7 +181,24 @@ public:
      */
     void train(cv::Mat image)
     {
+        for (int i=nLayer-1; i>=0; i--)
+        {
+            // construct input
+            cv::Mat inputFeature;
+            if (i!=0)
+            {
+                organizeRepresentation(feature[i-1], inputFeature);
+            }
+            else
+            {
+                inputFeature=image;
+            }
 
+            // training
+
+            trainSingleLayer(inputFeature, i);
+
+        }
     }
 
     /*
@@ -190,23 +212,14 @@ public:
     {
         /* this function hear demonstrate sparse autoencoder */
 
-        cv::Mat trainX;
-        sig.convertTo(trainX, CV_64FC1);
+        SparseAE::batch = sig.cols / 4;
 
-        SparseAE::batch = trainX.cols / 100;
+        // training given layer
+        SparseAE::trainSparseAutoencoder(dict[layer], sig, dictSize[layer], 3e-3, 0.1, 3, 2e-2, 80000);
 
-        vector<Mat> Activations;
-        //Mat tempX;
-        //if(i == 0) trainX.copyTo(tempX); else Activations[Activations.size() - 1].copyTo(tempX);
-        //SA tmpsa;
-        SparseAE::trainSparseAutoencoder(dict[layer], trainX, dictSize[layer], 3e-3, 0.1, 3, 2e-2, 80000);
-        /*
-        Mat tmpacti = tmpsa.W1 * tempX + repeat(dictionary[layer].b1, 1, trainX.cols);
-        tmpacti = sigmoid(tmpacti);
-        Activations.push_back(tmpacti);
-
-        SAA saa=getSparseAutoencoderActivation(HiddenLayers[0], trainX);
-        */
+        // update features
+        feature[layer] = dict[layer].W1 * sig + repeat(dict[layer].b1, 1, sig.cols);
+        feature[layer] = SparseAE::sigmoid(feature[layer]);
     }
 
     /*

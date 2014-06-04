@@ -34,10 +34,9 @@ This project is developed under Ubuntu 12.04.3 and Mac OS X.
 
 1. Clone the whole project (Matlab codes also provide some insight of the project)
 
-2. `cd` in `cpp` folder and configure with `cmake`
+2. `cd` in `destina` folder and configure with `cmake`
 
    ```
-   $ cd cpp
    $ mkdir build
    $ cd build
    $ cmake ..

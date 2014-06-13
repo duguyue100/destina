@@ -226,14 +226,14 @@ trainSparseAutoencoder(SA &sa, Mat &data, int hiddenSize, double lambda, double 
     int nfeatures = data.rows;
     int nsamples = data.cols;
 
-    weightRandomInit(sa, nfeatures, hiddenSize, nsamples, 0.12);
+    //weightRandomInit(sa, nfeatures, hiddenSize, nsamples, 0.12);
 
     if (IS_TEST_SA){
         gradientChecking(sa, data, lambda, sparsityParam, beta);
     }else{
         int converge = 0;
         double lastcost = 0.0;
-        //cout<<"Sparse Autoencoder Learning: "<<endl;
+        cout<<"Sparse Autoencoder Learning: "<<endl;
         while(converge < MaxIter){
 
             int randomNum = ((long)rand() + (long)rand()) % (data.cols - batch);
@@ -244,7 +244,7 @@ trainSparseAutoencoder(SA &sa, Mat &data, int hiddenSize, double lambda, double 
             else batchX = data;
 
             sparseAutoencoderCost(sa, batchX, lambda, sparsityParam, beta);
-            //cout<<"learning step: "<<converge<<", Cost function value = "<<sa.cost<<", randomNum = "<<randomNum<<endl;
+            cout<<"learning step: "<<converge<<", Cost function value = "<<sa.cost<<", randomNum = "<<randomNum<<endl;
             if(fabs((sa.cost - lastcost) ) <= 5e-5 && converge > 0) break;
             if(sa.cost <= 0.0) break;
             lastcost = sa.cost;

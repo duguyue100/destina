@@ -21,14 +21,28 @@ int main(void)
     int centroids[]={256, 128, 64, 32};
     DestinNetwork * network=new DestinNetwork(4, centroids);
 
-    network->train(imSig);
-    //network->trainSingleLayer(imSig, 0);
+    for (int i=1; i<2000; i++)
+    {
+        cout << "[TRAINING]" << i << endl;
+        network->train(imSig);
+    }
+
+    /*
+    for (int i=0;i<4;i++)
+    {
+        cout << network->feature[i] << endl;
+    }
+    */
+
+    //cout << network->feature[0] << endl;
 
     SparseAE::SAA saa=SparseAE::getSparseAutoencoderActivation(network->dict[0], imSig);
 
     cv::Mat recon;
     ProcTool::reorganizePatchesToImage(saa.aOutput, recon);
 
+    cv::imshow("test1", imout);
+    waitKey(0);
     cv::imshow("test", recon);
     waitKey(0);
 

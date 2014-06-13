@@ -44,6 +44,10 @@ public:
         for (int i=0; i<nLayer; i++)
         {
             SparseAE::SA temp;
+            // init dictionary
+            if (i==0)
+                SparseAE::weightRandomInit(temp, 16 ,dictSize[i], feature[i].cols, 0.12);
+            else SparseAE::weightRandomInit(temp, feature[i-1].rows*4 ,dictSize[i], feature[i].cols, 0.12);
             dict.push_back(temp);
         }
     }
@@ -158,7 +162,7 @@ public:
         int sideNewLength=(int)sqrt((double)noNewNodes);
         int repLength=in.rows/noRegionNodes;
 
-        out=Mat::zeros(repLength, noNodes, CV_32F);
+        out=Mat::zeros(repLength, noNodes, CV_64FC1);
         for (int i=0; i<sideNewLength; i++)
             for (int j=0; j<sideNewLength; j++)
             {
@@ -246,6 +250,81 @@ public:
     void extractRepresentation(cv::Mat image, cv::Mat & rep)
     {
 
+    }
+
+
+    /** DRAWING FUNCTIONS **/
+
+    /*
+     * Function: get a centroid image from specific layer.
+     *
+     * INPUT
+     * layer      : the specific layer.
+     * centroidID : this is the ID of a specific centroid, the ID
+     *              is identified according to dictionary's index.
+     *
+     * OUTPUT
+     * centroid : selected centroid's image.
+     */
+    void getCentroid(int layer, int centroidID, cv::Mat & centroid)
+    {
+        // get centroid information
+
+        // gradually reconstruct information
+
+        // reorganize centroid
+    }
+
+    /*
+     * Function: get a layer's centroids image.
+     *
+     * INPUT
+     * layer   : the specific layer.
+     * noCols  : how many centroids in a row.
+     * spacing : black spacing between each centroid's image.
+     *
+     * OUTPUT
+     * layerCentroid : selected layer's centroids image.
+     */
+    void getLayerCentroid(int layer, int noCols, int spacing, Mat &layerCentroid)
+    {
+        int noRows=dictSize[layer]/noCols;
+
+        // reorganize centroid images
+    }
+
+    /*
+     * Function: get a layer's centroids image with initial settings
+     *
+     * INPUT
+     * layer : the specific layer.
+     *
+     * OUTPUT
+     * layerCentroid : selected layer's centroids image.
+     */
+    void getLayerCentroid(int layer, cv::Mat & layerCentroid)
+    {
+        int noCols=(int)sqrt(dictSize[layer]);
+        getLayerCentroid(layer, noCols, 2, layerCentroid);
+    }
+
+    /*
+     * Function: get image reconstruction from different layer
+     *
+     * INPUT
+     * layer : the specific layer
+     *
+     * OUTPUT
+     * reconstruction : the reconstruction image
+     *
+     */
+    void getRecontruction(int layer, cv::Mat & reconstruction)
+    {
+        // get feature from certain layer
+
+        // gradually reconstruct the image to bottom layer
+
+        // return recontruction
     }
 
 };

@@ -22,7 +22,7 @@ This project is developed under Ubuntu 12.04.3 and Mac OS X.
 11. Interface for CIFAR image [DONE 20140621].
 12. Some visualisation tools for image dataset.
 13. Experiment result saving functions (needed to rescale to `uchar` space).
-14. Experiment with CIFAR images.
+14. Experiment with CIFAR images [DONE (untested completely) 20140622].
 
 ##Updates##
 
@@ -32,6 +32,7 @@ This project is developed under Ubuntu 12.04.3 and Mac OS X.
 4. Main components of DeSTIN network are sketched [2014-04-27]
 5. Sparse Autoencoder is updated [2014-06-14]
 6. General Refinement of DeSTIN architecture is updated [2014-06-21]
+7. CIFAR classification example sketch [2014-06-22]
 
 ##Setup##
 

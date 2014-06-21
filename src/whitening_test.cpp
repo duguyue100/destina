@@ -15,8 +15,8 @@ int main(void)
     cv::Mat imout;
     cv::Mat imWhite;
 
-    PreProc::preProcImage(im, ksize, true, imout);
-    PreProc::whiteningImage(imout, 0.1, imWhite);
+    ProcTool::preProcImage(im, ksize, true, imout);
+    ProcTool::whiteningImage(imout, 0.1, imWhite);
 
     imshow("Whitening Test", imWhite);
     waitKey(0);

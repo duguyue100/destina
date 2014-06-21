@@ -18,8 +18,8 @@ int main(void)
 
     cv::Mat GWD;
     cv::Mat GWDOut;
-    PreProc::generateGaborWavelet(M, N, ksize, PI, GWD);
-    PreProc::reorganizeGaborDictionary(M, N, ksize, GWD, GWDOut);
+    ProcTool::generateGaborWavelet(M, N, ksize, PI, GWD);
+    ProcTool::reorganizeGaborDictionary(M, N, ksize, GWD, GWDOut);
 
     imshow("Gabor Test", GWDOut.t());
 

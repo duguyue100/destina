@@ -23,15 +23,15 @@ int main(void)
     cv::Mat imageRep; // image signal representation
 
     // pre process image and whitening
-    PreProc::preProcImage(im, imSize, true, imout);
-    PreProc::whiteningImage(imout, 0.1, imWhite); // imWhite in float
+    ProcTool::preProcImage(im, imSize, true, imout);
+    ProcTool::whiteningImage(imout, 0.1, imWhite); // imWhite in float
     ProcTool::splitImageToPatches(imWhite, imageSig);
 
     // generate Gabor wavelet dictionary
     Size gwSize; gwSize.height=4; gwSize.width=4;
     int M=4, N=64;
     cv::Mat GWD;
-    PreProc::generateGaborWavelet(M, N, gwSize, PI, GWD);
+    ProcTool::generateGaborWavelet(M, N, gwSize, PI, GWD);
 
     // compute represenation
     IFSC::computeSignalRepresentation(imageSig.col(3), GWD, 10, imageRep);

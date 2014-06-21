@@ -25,6 +25,7 @@
 #include <vector>
 #include <queue>
 #include <limits>
+#include <ios>
 
 // OPENCV LIBRARY
 

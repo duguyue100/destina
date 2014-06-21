@@ -13,7 +13,7 @@ int main(int argc, char** argv)
     cv::Mat imout, imSig;
     Mat trainX;
 
-    PreProc::preProcImage(im, ksize, true, imout);
+    ProcTool::preProcImage(im, ksize, true, imout);
     ProcTool::splitImageToPatches(imout, imSig);
 
     //imSig.convertTo(trainX, CV_64FC1);

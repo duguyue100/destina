@@ -16,7 +16,6 @@ add_library (libdestinasys SHARED
 
 add_library (libdestina SHARED
         include/proc_tools.h
-        include/pre_proc.h
         include/ifsc.h
         include/destin_network.h
         include/destina_lib.h)
@@ -57,3 +56,9 @@ target_link_libraries(net_test ${OpenCV_LIBS})
 target_link_libraries(net_test libdestinasys)
 target_link_libraries(net_test libdestina)
 target_link_libraries(net_test libsa)
+
+add_executable (cifar src/cifar_test.cpp)
+target_link_libraries(cifar ${OpenCV_LIBS})
+target_link_libraries(cifar libdestinasys)
+target_link_libraries(cifar libdestina)
+target_link_libraries(cifar libsa)

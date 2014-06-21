@@ -206,6 +206,34 @@ public:
     }
 
     /*
+     * Function: this function performs a pre-training in bottom
+     *           up fashion.
+     *
+     * INPUT
+     * image : input image in patches form.
+     */
+    void pretrain(cv::Mat image)
+    {
+        for (int i=0; i<nLayer;i++)
+        {
+            // construct input
+            cv::Mat inputFeature;
+            if (i!=0)
+            {
+                organizeRepresentation(feature[i-1], inputFeature);
+            }
+            else
+            {
+                inputFeature=image;
+            }
+
+            // training
+
+            trainSingleLayer(inputFeature, i);
+        }
+    }
+
+    /*
      * Function: train a single layer based on input to such layer
      *
      * INPUT

@@ -255,6 +255,36 @@ public:
     }
 
     /*
+     * Function: this function is for caucluating feature from an image
+     *           for a trained network.
+     *
+     * INPUT
+     * image : image in patches form
+     *
+     * OUTPUT
+     * f : output feature array, this variable should be initialized
+     *     before feeding.
+     */
+    void observe(cv::Mat image, vector<cv::Mat> & f)
+    {
+        SparseAE::SAA temp;
+
+        for (int i=nLayer-1; i>=0; i--)
+        {
+            if (i!=0)
+            {
+                temp=SparseAE::getSparseAutoencoderActivation(dict[i], f[i-1]);
+                f[i]=temp.aOutput;
+            }
+            else
+            {
+                temp=SparseAE::getSparseAutoencoderActivation(dict[i], image);
+                f[i]=temp.aOutput;
+            }
+        }
+    }
+
+    /*
      * Function: update dictionary based on input samples.
      *
      * INPUT
@@ -350,9 +380,21 @@ public:
     {
         // get feature from certain layer
 
+        cv::Mat f=feature[layer];
+
         // gradually reconstruct the image to bottom layer
 
+        SparseAE::SAA temp;
+        for (int i=layer; i>=0; i--)
+        {
+            temp=SparseAE::getSparseAutoencoderActivation(dict[layer], f);
+            reorganizeRepresentation(temp.aOutput, f);
+        }
+
         // return recontruction
+
+        ProcTool::reorganizePatchesToImage(f, reconstruction);
+        f.release();
     }
 
 };

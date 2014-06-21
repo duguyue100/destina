@@ -157,7 +157,7 @@ public:
     {
         int noRegionNodes=4;
         int noNewNodes=in.cols;
-        int noNodes=noNodes*noRegionNodes;
+        int noNodes=noNewNodes*noRegionNodes;
         int sideOldLength=(int)sqrt((double)noNodes);
         int sideNewLength=(int)sqrt((double)noNewNodes);
         int repLength=in.rows/noRegionNodes;
@@ -167,10 +167,10 @@ public:
             for (int j=0; j<sideNewLength; j++)
             {
                 cv::Mat temp=in.col(i*sideNewLength+j);
-                temp(Rect(0,0,1,repLength)).copyTo(out.col((2*i-2)*sideOldLength+(2*j-1)));
-                temp(Rect(repLength,0,1,repLength)).copyTo(out.col((2*i-2)*sideOldLength+(2*j)));
-                temp(Rect(repLength*2,0,1,repLength)).copyTo(out.col((2*i-1)*sideOldLength+(2*j-1)));
-                temp(Rect(repLength*3,0,1,repLength)).copyTo(out.col((2*i-1)*sideOldLength+(2*j)));
+                temp(Rect(0,0,1,repLength)).copyTo(out.col((2*i)*sideOldLength+(2*j)));
+                temp(Rect(repLength,0,1,repLength)).copyTo(out.col((2*i)*sideOldLength+(2*j+1)));
+                temp(Rect(repLength*2,0,1,repLength)).copyTo(out.col((2*i+1)*sideOldLength+(2*j)));
+                temp(Rect(repLength*3,0,1,repLength)).copyTo(out.col((2*i+1)*sideOldLength+(2*j+1)));
 
                 temp.release();
             }
@@ -267,21 +267,23 @@ public:
      */
     void observe(cv::Mat image, vector<cv::Mat> & f)
     {
-        SparseAE::SAA temp;
-
+        cv::Mat inF;
         for (int i=nLayer-1; i>=0; i--)
         {
             if (i!=0)
             {
-                temp=SparseAE::getSparseAutoencoderActivation(dict[i], f[i-1]);
-                f[i]=temp.aOutput;
+                organizeRepresentation(f[i-1], inF);
+                f[i] = dict[i].W1 * inF + repeat(dict[i].b1, 1, inF.cols);
+                f[i] = SparseAE::sigmoid(f[i]);
             }
             else
             {
-                temp=SparseAE::getSparseAutoencoderActivation(dict[i], image);
-                f[i]=temp.aOutput;
+                f[i] = dict[i].W1 * image + repeat(dict[i].b1, 1, image.cols);
+                f[i] = SparseAE::sigmoid(f[i]);
             }
         }
+
+        inF.release();
     }
 
     /*

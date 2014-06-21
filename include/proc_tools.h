@@ -302,9 +302,11 @@ void processCIFARBatch(vector<cv::Mat> batch, vector<cv::Mat> & processedBatch)
     cv::Mat temp;
     for (int i=0; i<batch.size(); i++)
     {
+        cv::Mat tempSig;
         preProcImage(batch[i], ksize, true, temp);
-        splitImageToPatches(temp, temp);
-        processedBatch.push_back(temp);
+        splitImageToPatches(temp, tempSig);
+        processedBatch.push_back(tempSig);
+        tempSig.release();
     }
 
     temp.release();

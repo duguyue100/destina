@@ -11,17 +11,18 @@ This project is developed under Ubuntu 12.04.3 and Mac OS X.
 
 1. Information filter based sparse coding.
 2. Fast inverse (optional)
-3. Test on Gabor wavelet dictionary and natural image with sparse coding.
-4. Clustering algorithm for upper layer.
+3. Test on Gabor wavelet dictionary and natural image with sparse coding. [DONE 20140422]
+4. Clustering algorithm for upper layer. [DONE changed to sparse autoencoder]
 5. Test on second layer learned representation.
 6. Centroids/Dictionary visualisation.
-7. Signal composition and decomposition [done, haven't tested].
-8. General mapping between layers [done, haven't tested].
+7. Signal composition and decomposition [DONE 20140425].
+8. General mapping between layers [DONE 20140504].
 9. Performance evaluation.
 10. Memory leaking.
-11. Interface for CIFAR image.
+11. Interface for CIFAR image [DONE 20140621].
 12. Some visualisation tools for image dataset.
 13. Experiment result saving functions (needed to rescale to `uchar` space).
+14. Experiment with CIFAR images.
 
 ##Updates##
 
@@ -29,6 +30,8 @@ This project is developed under Ubuntu 12.04.3 and Mac OS X.
 2. Image whitening updated [2014-04-24]
 3. Information filter based sparse coding and test updated [2014-04-25 (undone)]
 4. Main components of DeSTIN network are sketched [2014-04-27]
+5. Sparse Autoencoder is updated [2014-06-14]
+6. General Refinement of DeSTIN architecture is updated [2014-06-21]
 
 ##Setup##
 

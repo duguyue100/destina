@@ -1,5 +1,5 @@
 // Author : Hu Yuhuang
-// Date   : 20140422
+// Date   : 2014-04-22
 
 /*
  * This file contains a test for generating Gabor wavelet dictionary.

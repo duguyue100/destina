@@ -1,3 +1,10 @@
+// Author : Hu Yuhuang
+// Date   : 2014-06-04
+
+/*
+ * This file contains a test of sparse autoencoder
+ */
+
 #include "destina_sys_lib.h"
 #include "destina_lib.h"
 

@@ -18,6 +18,10 @@ int main(void)
     ProcTool::readCIFARBatch(filename, 10, images, label);
     ProcTool::processCIFARBatch(images, imSignals);
 
+    Mat C = (Mat_<double>(3,3) << 0, -1, 0, -1, 5, -1, 0, -1, 0);
+
+    cout << C.reshape(0, 9) << endl;
+
     cv::imshow("test", images[1]);
     cv::waitKey(0);
 

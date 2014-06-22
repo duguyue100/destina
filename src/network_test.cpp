@@ -13,7 +13,6 @@ int main(void)
     Size ksize; ksize.height=256; ksize.width=256;
     cv::Mat im=imread("../../resources/lenna.png");
     cv::Mat imout, imSig;
-    Mat trainX;
 
     ProcTool::preProcImage(im, ksize, true, imout);
     ProcTool::splitImageToPatches(imout, imSig);
@@ -21,14 +20,16 @@ int main(void)
     int centroids[]={256, 128, 64, 32};
     DestinNetwork * network=new DestinNetwork(4, centroids);
 
-    for (int i=1; i<100; i++)
+
+    for (int i=1; i<200; i++)
     {
         cout << "[TRAINING]" << i << endl;
         network->pretrain(imSig);
     }
 
+
     /*
-    for (int i=1; i<2000; i++)
+    for (int i=1; i<20; i++)
     {
         cout << "[TRAINING]" << i << endl;
         network->train(imSig);
@@ -44,10 +45,14 @@ int main(void)
 
     //cout << network->feature[0] << endl;
 
-    SparseAE::SAA saa=SparseAE::getSparseAutoencoderActivation(network->dict[0], imSig);
+
+
+    //SparseAE::SAA saa=SparseAE::getSparseAutoencoderActivation(network->dict[0], imSig);
 
     cv::Mat recon;
-    ProcTool::reorganizePatchesToImage(saa.aOutput, recon);
+
+    network->getRecontruction(3, recon);
+    //ProcTool::reorganizePatchesToImage(saa.aOutput, recon);
 
     cv::imshow("test1", imout);
     waitKey(0);

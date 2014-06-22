@@ -18,12 +18,12 @@ int main(void)
     cv::Mat label = Mat::zeros(1, 10000, CV_64FC1);
 
     string filename="../../cifar-10-batches-bin/data_batch_1.bin";
-    ProcTool::readCIFARBatch(filename, 200, images, label);
+    ProcTool::readCIFARBatch(filename, 10000, images, label);
     ProcTool::processCIFARBatch(images, imSignals);
 
     cout << "[MESSAGE] Images processed" << endl;
 
-    int split=100;
+    int split=1000;
     int noIteration=8;
     cv::Mat preTrainSignal=imSignals[0];
 
@@ -34,7 +34,7 @@ int main(void)
 
     // train batch
 
-    for (int i=1; i<=1; i++)
+    for (int i=1; i<=10; i++)
     {
         network->pretrain(preTrainSignal);
         cout << "[MESSAGE][PRETRAINING] " << i << "th iteration completed" << "\r";
@@ -60,7 +60,7 @@ int main(void)
     cout << "[MESSAGE][TESTING] Prepare testing" << endl;
 
 
-    vector<cv::Mat> observedF;
+    cv::Mat observedF;
     for (int i=0; i<imSignals.size(); i++)
     {
         vector<cv::Mat> f;
@@ -70,8 +70,14 @@ int main(void)
             network->observe(imSignals[i], f);
         }
 
+        cv::Mat tempF=f[1].t();
+        tempF=tempF.reshape(0, f[1].cols*f[1].rows);
+
         // extract feature;
-        observedF.push_back(f[3]);
+        if (i==0) observedF=tempF;
+        else cv::hconcat(observedF, tempF, observedF);
+
+        tempF.release();
 
         cout << "[MESSAGE][TESTING] Feature of " << i << "th image extracted" << "\r";
         cout.flush();
@@ -79,9 +85,20 @@ int main(void)
 
     cout << endl << "[MESSAGE] Feature extracted" << endl;
 
-    cout << observedF.size() << endl;
-    cout << observedF[0].rows << endl;
-    cout << observedF[0].cols << endl;
+    ofstream fout("label.txt");
+    fout << label << endl;
+
+    fout.close();
+
+    cout << "[MESSAGE] Lables are written to file" << endl;
+
+    fout.open("feature.txt");
+
+    fout << observedF << endl;
+
+    fout.close();
+
+    cout << "[MESSAGE] Features are written to file" << endl;
 
     return 0;
 }

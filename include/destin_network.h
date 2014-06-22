@@ -168,9 +168,9 @@ public:
             {
                 cv::Mat temp=in.col(i*sideNewLength+j);
                 temp(Rect(0,0,1,repLength)).copyTo(out.col((2*i)*sideOldLength+(2*j)));
-                temp(Rect(repLength,0,1,repLength)).copyTo(out.col((2*i)*sideOldLength+(2*j+1)));
-                temp(Rect(repLength*2,0,1,repLength)).copyTo(out.col((2*i+1)*sideOldLength+(2*j)));
-                temp(Rect(repLength*3,0,1,repLength)).copyTo(out.col((2*i+1)*sideOldLength+(2*j+1)));
+                temp(Rect(0,repLength,1,repLength)).copyTo(out.col((2*i)*sideOldLength+(2*j+1)));
+                temp(Rect(0,repLength*2,1,repLength)).copyTo(out.col((2*i+1)*sideOldLength+(2*j)));
+                temp(Rect(0,repLength*3,1,repLength)).copyTo(out.col((2*i+1)*sideOldLength+(2*j+1)));
 
                 temp.release();
             }
@@ -386,14 +386,15 @@ public:
 
         // gradually reconstruct the image to bottom layer
 
-        SparseAE::SAA temp;
+        cv::Mat temp;
         for (int i=layer; i>=0; i--)
         {
-            temp=SparseAE::getSparseAutoencoderActivation(dict[layer], f);
-            reorganizeRepresentation(temp.aOutput, f);
-        }
+            temp = dict[i].W2 * f + repeat(dict[i].b2, 1, f.cols);
+            temp = SparseAE::sigmoid(temp);
 
-        // return recontruction
+            if (i!=0) reorganizeRepresentation(temp, f);
+            else f=temp;
+        }
 
         ProcTool::reorganizePatchesToImage(f, reconstruction);
         f.release();

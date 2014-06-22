@@ -54,6 +54,20 @@ This project is developed under Ubuntu 12.04.3 and Mac OS X.
    $ sh update-all.sh
    ```
 
+5. __How to set up CIFAR-10 test__: download CIFAR-10 dataset and unzip it under `destina` folder. Then after you build the project, under `build/bin` you should run `classify`, then if nothing wrong, your test should go well. All the details are specified in `src/classify_test.cpp`. You can change line 20 to specify which dataset you are using. Currently, I just wrote up a example on one training dataset, you can do more on the rest by modify the program. To ensure your are on the right track, here is the folder structure  from my project
+   ```
+   /destina
+       /build
+       /cifar-10-batches-bin
+       CMakeLists.txt
+       /include
+       LICENSE
+       README.md
+       /resources
+       /src
+       update-all.sh
+   ```
+
 ##Notes##
 
 1. Example of Gabor Wavelet dictionary
@@ -69,6 +83,10 @@ This project is developed under Ubuntu 12.04.3 and Mac OS X.
 4. Example of reconstruction image with sparse autoencoder
 
    ![Sparse Autoencoder Reconstruction](/resources/sparse_autoencoder_reconstruction.png)
+
+5. In this implementation, to ensure that DeSTIN is started from a better place, I employed a bottom-up batch training to train the autoencoder in each layer with a batch of images. And after this pre-training, the training stage will be performed as usual and the  speed is quite fast. __Noted that pre-training stage would take a lot of times, so it needs to consider another way to speedup.__ [2014-06-22]
+
+6. Image Reconstruction indicated that this implementation is performed OK on average. So that if we only employ first layer's learning result, it should still give us state-of-art performance with a plain autoencoder. [2014-06-22]
 
 ##Contacts##
 

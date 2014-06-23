@@ -12,19 +12,22 @@ int main(void)
 {
     Size ksize; ksize.height=256; ksize.width=256;
     cv::Mat im=imread("../../resources/lenna.png");
-    cv::Mat imout, imSig;
+    cv::Mat imout, imSig, imNormal, imWhite;
 
     ProcTool::preProcImage(im, ksize, true, imout);
     ProcTool::splitImageToPatches(imout, imSig);
+
+    ProcTool::contrastNormalization(imSig, 0.04, imNormal);
+    ProcTool::whitening(imNormal, 0.1, imWhite);
 
     int centroids[]={256, 128, 64, 32};
     DestinNetwork * network=new DestinNetwork(4, centroids);
 
 
-    for (int i=1; i<200; i++)
+    for (int i=1; i<100; i++)
     {
         cout << "[TRAINING]" << i << endl;
-        network->pretrain(imSig);
+        network->pretrain(imWhite);
     }
 
 
@@ -51,7 +54,7 @@ int main(void)
 
     cv::Mat recon;
 
-    network->getRecontruction(3, recon);
+    network->getRecontruction(0, recon);
     //ProcTool::reorganizePatchesToImage(saa.aOutput, recon);
 
     cv::imshow("test1", imout);

@@ -10,15 +10,19 @@
 
 int main(void)
 {
-    Size ksize; ksize.height=512; ksize.width=512;
+    Size ksize; ksize.height=256; ksize.width=256;
     cv::Mat im=imread("../../resources/lenna.png");
     cv::Mat imout;
     cv::Mat imWhite;
+    cv::Mat imNormal;
 
     ProcTool::preProcImage(im, ksize, true, imout);
-    ProcTool::whiteningImage(imout, 0.1, imWhite);
+
+    ProcTool::contrastNormalizedImage(imout, 0.04, imNormal);
+    ProcTool::whiteningImage(imNormal, 0.1, imWhite);
 
     imshow("Whitening Test", imWhite);
+    cout << imWhite << endl;
     waitKey(0);
 
     return 0;

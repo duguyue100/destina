@@ -400,6 +400,31 @@ public:
         f.release();
     }
 
+    /** Load and Save Function **/
+
+    /*
+     * Function: this function load network from file
+     *
+     * INPUT
+     * filename : input file name
+     */
+    void load(string filename)
+    {
+
+    }
+
+    /*
+     * Function: this function save network to file
+     *
+     * INPUT
+     * filename : export file name
+     *
+     */
+    void save(string filename)
+    {
+
+    }
+
 };
 
 #endif // DESTIN_NETWORK_H

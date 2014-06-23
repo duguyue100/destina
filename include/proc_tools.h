@@ -196,24 +196,73 @@ void preProcImage(cv::Mat in, Size S, bool gray, cv::Mat & out)
 }
 
 /*
- * Function: this function receives a original grayscaled image and
- *           return ZCA whitened image
+ * Function: this function perform contrast normalization on image patches
  *
  * INPUT
- * in      : original image
+ * in      : image patches in column form
+ * epsilon : contrast constant
+ *
+ * OUTPUT
+ * out : output normalized image patches
+ */
+void contrastNormalization(cv::Mat in, double epsilon, cv::Mat & out)
+{
+
+    cv::Mat mean=Mat::zeros(1, in.cols, CV_64FC1);
+    cv::Mat normalizer=Mat::zeros(1, in.cols, CV_64FC1);
+
+    // calculate mean and variance for each image patch
+    for (int i=0; i<in.cols; i++)
+    {
+        Mat t1, t2;
+        cv::meanStdDev(in.col(i), t1, t2);
+        mean.at<double>(0, i)=t1.at<double>(0,0);
+        normalizer.at<double>(0,i)=sqrt(t2.at<double>(0,0)*t2.at<double>(0,0)+epsilon);
+    }
+
+    // calculate contrast normalization for each patch
+    out=in;
+    for (int i=0; i<out.rows; i++)
+    {
+        out.row(i)-=mean;
+        cv::divide(out.row(i), normalizer, out.row(i));
+    }
+}
+
+/*
+ * Function: this function perform contrast normalization on a image
+ *
+ * INPUT
+ * in      : input image
+ * epsilon : contrast constant
+ *
+ * OUTPUT
+ * out : output image
+ */
+void contrastNormalizedImage(cv::Mat in, double epsilon, cv::Mat & out)
+{
+    cv::Mat tempIn, tempOut;
+
+    splitImageToPatches(in, tempIn);
+
+    contrastNormalization(tempIn, epsilon, tempOut);
+
+    reorganizePatchesToImage(tempOut, out);
+}
+
+/*
+ * Function: this function receives image patches and return ZCA whitening
+ *
+ * INPUT
+ * in      : image patches
  * epsilon : constant (0.1)
  *
  * OUTPUT
- * out : ZCA whitened image
- *
+ * out : ZCA whitened image patches
  */
-void whiteningImage(cv::Mat in, double epsilon, cv::Mat & out)
+void whitening(cv::Mat in, double epsilon, cv::Mat & out)
 {
-    cv::Mat temp;
-    // split image to batches
-
-    splitImageToPatches(in, temp);
-
+    cv::Mat temp=in;
     // rescale mean to zero
 
     Mat mean=temp.col(0);
@@ -237,7 +286,32 @@ void whiteningImage(cv::Mat in, double epsilon, cv::Mat & out)
     cv::sqrt(Mat::diag(eigenValues+epsilon), eigenSqrt);
     eigenSqrt=1/eigenSqrt;
 
-    Mat whitenedImage=eigenVectors*eigenSqrt*eigenVectors.t()*temp;
+    out=eigenVectors*eigenSqrt*eigenVectors.t()*temp;
+}
+
+/*
+ * Function: this function receives a original grayscaled image and
+ *           return ZCA whitened image
+ *
+ * INPUT
+ * in      : original image
+ * epsilon : constant (0.1)
+ *
+ * OUTPUT
+ * out : ZCA whitened image
+ *
+ */
+void whiteningImage(cv::Mat in, double epsilon, cv::Mat & out)
+{
+    cv::Mat temp;
+    // split image to batches
+
+    splitImageToPatches(in, temp);
+
+    // whitening
+
+    cv::Mat whitenedImage;
+    whitening(temp, epsilon, whitenedImage);
 
     // restore image
 

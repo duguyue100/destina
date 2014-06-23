@@ -18,7 +18,7 @@ This project is developed under Ubuntu 12.04.3 and Mac OS X.
 7. Signal composition and decomposition [DONE 20140425].
 8. General mapping between layers [DONE 20140504].
 9. Performance evaluation.
-10. Memory leaking.
+10. Memory leaking. [DONE 20140622]
 11. Interface for CIFAR image [DONE 20140621].
 12. Some visualisation tools for image dataset.
 13. Experiment result saving functions (needed to rescale to `uchar` space).
@@ -33,6 +33,7 @@ This project is developed under Ubuntu 12.04.3 and Mac OS X.
 5. Sparse Autoencoder is updated [2014-06-14]
 6. General Refinement of DeSTIN architecture is updated [2014-06-21]
 7. CIFAR classification example sketch [2014-06-22]
+8. Revised contrast normalisation and whitening [2014-06-23]
 
 ##Setup##
 

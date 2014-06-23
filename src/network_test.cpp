@@ -20,11 +20,17 @@ int main(void)
     ProcTool::contrastNormalization(imSig, 0.04, imNormal);
     ProcTool::whitening(imNormal, 0.1, imWhite);
 
+    double min, max;
+    cv::minMaxLoc(imWhite, &min, &max);
+    imWhite-=min;
+    cv::minMaxLoc(imWhite, &min, &max);
+    imWhite/=max;
+
     int centroids[]={256, 128, 64, 32};
     DestinNetwork * network=new DestinNetwork(4, centroids);
 
 
-    for (int i=1; i<100; i++)
+    for (int i=1; i<10; i++)
     {
         cout << "[TRAINING]" << i << endl;
         network->pretrain(imWhite);

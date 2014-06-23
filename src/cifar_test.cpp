@@ -10,6 +10,7 @@
 
 int main(void)
 {
+    Size ksize; ksize.height=64; ksize.width=64;
     vector<Mat> images;
     vector<Mat> imSignals;
     Mat label = Mat::zeros(1, 10000, CV_64FC1);
@@ -18,22 +19,19 @@ int main(void)
     ProcTool::readCIFARBatch(filename, 10, images, label);
     ProcTool::processCIFARBatch(images, imSignals);
 
-    Mat C = (Mat_<double>(3,3) << 0, -1, 0, -1, 5, -1, 0, -1, 0);
+    cv::Mat imout, imNormal, imWhite;
+    ProcTool::preProcImage(images[1], ksize, true, imout);
 
-    cout << C.reshape(0, 9) << endl;
+    ProcTool::contrastNormalizedImage(imout, 0.05, imNormal);
+    ProcTool::whiteningImage(imNormal, 0.1, imWhite);
 
-    Mat mean;
-    Mat stddev;
-    cv::meanStdDev(C, mean, stddev);
+    double min, max;
+    cv::minMaxLoc(imWhite, &min, &max);
+    imWhite-=min;
+    cv::minMaxLoc(imWhite, &min, &max);
+    imWhite/=max;
 
-    cout << mean << endl;
-    cout << stddev << endl;
-    Mat A=Mat::zeros(2,3,CV_64FC1)+1;
-    Mat B=Mat::ones(2,3, CV_64FC1)*2;
-    cv::divide(A.row(0), B.row(0), A.row(0));
-    cout << A << endl;
-
-    cv::imshow("test", images[1]);
+    cv::imshow("test", imWhite);
     cv::waitKey(0);
 
     return 0;

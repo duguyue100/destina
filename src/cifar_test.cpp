@@ -10,7 +10,7 @@
 
 int main(void)
 {
-    Size ksize; ksize.height=64; ksize.width=64;
+    Size ksize; ksize.height=32; ksize.width=32;
     vector<Mat> images;
     vector<Mat> imSignals;
     Mat label = Mat::zeros(1, 10000, CV_64FC1);
@@ -19,11 +19,12 @@ int main(void)
     ProcTool::readCIFARBatch(filename, 10, images, label);
     ProcTool::processCIFARBatch(images, imSignals);
 
-    cv::Mat imout, imNormal, imWhite;
+    cv::Mat imout, imSig, imWhite;
     ProcTool::preProcImage(images[1], ksize, true, imout);
+    ProcTool::splitImageToPatches(imout, imSig);
 
-    ProcTool::contrastNormalizedImage(imout, 0.05, imNormal);
-    ProcTool::whiteningImage(imNormal, 0.1, imWhite);
+    //ProcTool::contrastNormalization(imSig, 0.04, imNormal);
+    ProcTool::whitening(imSig, 0.1, imWhite);
 
     double min, max;
     cv::minMaxLoc(imWhite, &min, &max);
@@ -31,7 +32,11 @@ int main(void)
     cv::minMaxLoc(imWhite, &min, &max);
     imWhite/=max;
 
-    cv::imshow("test", imWhite);
+    cv::Mat recon;
+
+    ProcTool::reorganizePatchesToImage(imSignals[1], recon);
+
+    cv::imshow("test", recon);
     cv::waitKey(0);
 
     return 0;

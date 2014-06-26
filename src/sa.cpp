@@ -17,7 +17,7 @@ int main(int argc, char** argv)
 
     Size ksize; ksize.height=512; ksize.width=512;
     cv::Mat im=imread("../../resources/lenna.png");
-    cv::Mat imout, imSig;
+    cv::Mat imout, imSig, imNormal, imWhite;
     Mat trainX;
 
     ProcTool::preProcImage(im, ksize, true, imout);

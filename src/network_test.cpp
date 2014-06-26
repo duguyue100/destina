@@ -17,8 +17,8 @@ int main(void)
     ProcTool::preProcImage(im, ksize, true, imout);
     ProcTool::splitImageToPatches(imout, imSig);
 
-    ProcTool::contrastNormalization(imSig, 0.04, imNormal);
-    ProcTool::whitening(imNormal, 0.1, imWhite);
+    //ProcTool::contrastNormalization(imSig, 0.04, imNormal);
+    ProcTool::whitening(imSig, 0.1, imWhite);
 
     double min, max;
     cv::minMaxLoc(imWhite, &min, &max);
@@ -26,11 +26,17 @@ int main(void)
     cv::minMaxLoc(imWhite, &min, &max);
     imWhite/=max;
 
-    int centroids[]={256, 128, 64, 32};
+//    cv::Mat reconWhite;
+//    ProcTool::reorganizePatchesToImage(imWhite, reconWhite);
+//    imshow("test3", reconWhite);
+//    cv::waitKey(0);
+
+
+    int centroids[]={128, 64, 32, 32};
     DestinNetwork * network=new DestinNetwork(4, centroids);
 
 
-    for (int i=1; i<10; i++)
+    for (int i=1; i<20; i++)
     {
         cout << "[TRAINING]" << i << endl;
         network->pretrain(imWhite);
@@ -60,7 +66,7 @@ int main(void)
 
     cv::Mat recon;
 
-    network->getRecontruction(0, recon);
+    network->getRecontruction(1, recon);
     //ProcTool::reorganizePatchesToImage(saa.aOutput, recon);
 
     cv::imshow("test1", imout);

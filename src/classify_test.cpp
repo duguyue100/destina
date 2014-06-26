@@ -10,7 +10,7 @@
 
 int main(void)
 {
-    int centroids[]={256, 128, 64, 32};
+    int centroids[]={128, 64, 64, 32};
     DestinNetwork * network=new DestinNetwork(4, centroids);
 
     vector<cv::Mat> images;

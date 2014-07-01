@@ -236,12 +236,13 @@ trainSparseAutoencoder(SA &sa, Mat &data, int hiddenSize, double lambda, double 
         cout<<"Sparse Autoencoder Learning: "<<endl;
         while(converge < MaxIter){
 
-            int randomNum = ((long)rand() + (long)rand()) % (data.cols - batch);
+            int randomNum = abs(((long)rand() + (long)rand()) % (data.cols - batch));
             Rect roi = Rect(randomNum, 0, batch, data.rows);
 
             Mat batchX;
             if (batch!=0) batchX = data(roi);
             else batchX = data;
+
 
             sparseAutoencoderCost(sa, batchX, lambda, sparsityParam, beta);
             cout<<"learning step: "<<converge<<", Cost function value = "<<sa.cost<<", randomNum = "<<randomNum<<endl;

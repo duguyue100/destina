@@ -237,14 +237,15 @@ public:
      * Function: train a single layer based on input to such layer
      *
      * INPUT
-     * sig   : input for such layer
-     * layer : layer indicator
+     * sig     : input for such layer
+     * layer   : layer indicator
+     * noBatch : number of batches
      */
-    void trainSingleLayer(cv::Mat sig, int layer)
+    void trainSingleLayer(cv::Mat sig, int layer, int noBatch)
     {
         /* this function hear demonstrate sparse autoencoder */
 
-        SparseAE::batch = sig.cols / 4;
+        SparseAE::batch = sig.cols / noBatch;
 
         // training given layer
         SparseAE::trainSparseAutoencoder(dict[layer], sig, dictSize[layer], 3e-3, 0.1, 3, 2e-2, 80000);
@@ -252,6 +253,18 @@ public:
         // update features
         feature[layer] = dict[layer].W1 * sig + repeat(dict[layer].b1, 1, sig.cols);
         feature[layer] = SparseAE::sigmoid(feature[layer]);
+    }
+
+    /*
+     * Function: train a single layer based on input to such layer
+     *
+     * INPUT
+     * sig     : input for such layer
+     * layer   : layer indicator
+     */
+    void trainSingleLayer(Mat sig, int layer)
+    {
+        trainSingleLayer(sig, layer, 4);
     }
 
     /*

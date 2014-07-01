@@ -9,6 +9,10 @@ set (EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/build/bin)
 set (LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/build/lib)
 
 FIND_PACKAGE (OpenCV REQUIRED)
+FIND_PACKAGE (OpenMP)
+
+set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 
 include_directories ("${PROJECT_SOURCE_DIR}/build/lib")
 add_library (libdestinasys SHARED

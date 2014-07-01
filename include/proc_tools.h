@@ -374,18 +374,20 @@ void processCIFARBatch(vector<cv::Mat> batch, vector<cv::Mat> & processedBatch)
     Size ksize; ksize.height=32; ksize.width=32;
 
     cv::Mat temp;
+    double min, max;
     for (int i=0; i<batch.size(); i++)
     {
         cv::Mat tempSig, tempWhite;
         preProcImage(batch[i], ksize, true, temp);
         splitImageToPatches(temp, tempSig);
+
         ProcTool::whitening(tempSig, 0.1, tempWhite);
-        double min, max;
         cv::minMaxLoc(tempWhite, &min, &max);
         tempWhite-=min;
         cv::minMaxLoc(tempWhite, &min, &max);
         tempWhite/=max;
         processedBatch.push_back(tempWhite);
+
         tempSig.release();
         tempWhite.release();
     }

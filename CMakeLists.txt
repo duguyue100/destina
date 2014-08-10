@@ -10,6 +10,7 @@ set (LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/build/lib)
 
 FIND_PACKAGE (OpenCV REQUIRED)
 FIND_PACKAGE (OpenMP)
+FIND_PACKAGE (SWIG)
 
 set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
@@ -72,3 +73,9 @@ target_link_libraries(classify ${OpenCV_LIBS})
 target_link_libraries(classify libdestinasys)
 target_link_libraries(classify libdestina)
 target_link_libraries(classify libsa)
+
+# Python Support
+
+INCLUDE("UseSWIG")
+
+add_subdirectory(Python)

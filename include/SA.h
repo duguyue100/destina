@@ -48,8 +48,7 @@ typedef struct SparseAutoencoderActivation{
     Mat aOutput;
 }SAA;
 
-Mat
-concatenateMat(vector<Mat> &vec){
+Mat concatenateMat(vector<Mat> &vec){
 
     int height = vec[0].rows;
     int width = vec[0].cols;
@@ -68,8 +67,7 @@ concatenateMat(vector<Mat> &vec){
     return res;
 }
 
-int
-ReverseInt (int i){
+int ReverseInt (int i){
     unsigned char ch1, ch2, ch3, ch4;
     ch1 = i & 255;
     ch2 = (i >> 8) & 255;
@@ -78,22 +76,51 @@ ReverseInt (int i){
     return((int) ch1 << 24) + ((int)ch2 << 16) + ((int)ch3 << 8) + ch4;
 }
 
-Mat
-sigmoid(Mat &M){
+/*
+ * Function: the function calculates sigmoid function of a matrix in element
+ *           wise. The function normalizes values to (0,1).
+ *           f(x)=1/(1+exp(-x))
+ *
+ * INPUT
+ * M : the input matrix.
+ *
+ * OUTPUT
+ * Mat : the output matrix.
+ */
+Mat sigmoid(Mat &M){
     Mat temp;
     exp(-M, temp);
     return 1.0 / (temp + 1.0);
 }
 
-Mat
-dsigmoid(Mat &a){
+/*
+ * Function: the first derivative of sigmoid function. g(x)=f(x)(1-f(x)).
+ *
+ * INPUT
+ * a : the input matrix.
+ *
+ * OUTPUT
+ * Mat : the output matrix.
+ */
+Mat dsigmoid(Mat &a){
     Mat res = 1.0 - a;
     res = res.mul(a);
     return res;
 }
 
-void
-weightRandomInit(SA &sa, int inputsize, int hiddensize, int nsamples, double epsilon){
+/*
+ * Function: this function initializes weights in an autoencoder.
+ *
+ * INPUT:
+ * inputsize  : size of input layer.
+ * hiddensize : size of hidden layer.
+ * nsamples   : number of samples.
+ * epilson    : constant.
+ *
+ * OUTPUT
+ * sa : output initialized autoencoder
+ */
+void weightRandomInit(SA &sa, int inputsize, int hiddensize, int nsamples, double epsilon){
 
     double *pData;
     sa.W1 = Mat::ones(hiddensize, inputsize, CV_64FC1);
@@ -133,8 +160,17 @@ weightRandomInit(SA &sa, int inputsize, int hiddensize, int nsamples, double eps
     sa.cost = 0.0;
 }
 
-SAA
-getSparseAutoencoderActivation(SA &sa, Mat &data){
+/*
+ * Function: this function get autoencoder activation from input data.
+ *
+ * INPUT:
+ * sa   : an autoencoder object.
+ * data : input data.
+ *
+ * OUTPUT
+ * SAA : SAA object which stores activations.
+ */
+SAA getSparseAutoencoderActivation(SA &sa, Mat &data){
     SAA acti;
     data.copyTo(acti.aInput);
     acti.aHidden = sa.W1 * acti.aInput + repeat(sa.b1, 1, data.cols);
@@ -144,8 +180,20 @@ getSparseAutoencoderActivation(SA &sa, Mat &data){
     return acti;
 }
 
-void
-sparseAutoencoderCost(SA &sa, Mat &data, double lambda, double sparsityParam, double beta){
+/*
+ * Function: this function calculates costs for given sparse autoencoder.
+ *
+ * INPUT
+ * sa            : given autoencoder.
+ * data          : input data.
+ * lambda        : constant.
+ * sparsityParam : sparsity parameter.
+ * beta          : constant.
+ *
+ * OUTPUT
+ * sa : the cost is updated in given autoencoder object.
+ */
+void sparseAutoencoderCost(SA &sa, Mat &data, double lambda, double sparsityParam, double beta){
 
     int nfeatures = data.rows;
     int nsamples = data.cols;
@@ -195,11 +243,22 @@ sparseAutoencoderCost(SA &sa, Mat &data, double lambda, double sparsityParam, do
     sa.b2grad /= nsamples;
 }
 
-void
-gradientChecking(SA &sa, Mat &data, double lambda, double sparsityParam, double beta){
+/*
+ * Function: this function run gradient checking in numerical way.
+ *           (do not enable while real task is running).
+ *
+ * INPUT
+ * sa            : given autoencoder.
+ * data          : input data.
+ * lambda        : constant.
+ * sparsityParam : sparsity parameter.
+ * beta          : constant.
+ *
+ * OUTPUT
+ * void : this function will print checking on terminal.
+ */
+void gradientChecking(SA &sa, Mat &data, double lambda, double sparsityParam, double beta){
 
-    //Gradient Checking (remember to disable this part after you're sure the
-    //cost function and dJ function are correct)
     sparseAutoencoderCost(sa, data, lambda, sparsityParam, beta);
     Mat w1g(sa.W1grad);
     cout<<"test sparse autoencoder !!!!"<<endl;
@@ -220,8 +279,23 @@ gradientChecking(SA &sa, Mat &data, double lambda, double sparsityParam, double 
     }
 }
 
-void
-trainSparseAutoencoder(SA &sa, Mat &data, int hiddenSize, double lambda, double sparsityParam, double beta, double lrate, int MaxIter){
+/*
+ * Function: this function control the main training for a given autoencoder.
+ *
+ * INPUT
+ * sa            : given autoencoder (make sure already initialized).
+ * data          : given training dataset.
+ * hiddenSize    : hidden layer size.
+ * lambda        : constant.
+ * sparsityParam : sparsity parameter.
+ * beta          : constant.
+ * lrate         : constant.
+ * MaxIter       : maximum number of iterations.
+ *
+ * OUTPUT
+ * sa : trained autoencoder.
+ */
+void trainSparseAutoencoder(SA &sa, Mat &data, int hiddenSize, double lambda, double sparsityParam, double beta, double lrate, int MaxIter){
 
     int nfeatures = data.rows;
     int nsamples = data.cols;

@@ -20,9 +20,9 @@ This project is developed under Ubuntu 12.04.3 and Mac OS X.
 9. Performance evaluation.
 10. Memory leaking. [DONE 20140622]
 11. Interface for CIFAR image [DONE 20140621].
-12. Some visualisation tools for image dataset.
+12. Some visualisation tools for image dataset. [DONE]
 13. Experiment result saving functions (needed to rescale to `uchar` space).
-14. Experiment with CIFAR images [DONE (untested completely) 20140622].
+14. Experiment with CIFAR images [DONE 20140622 (UPDATED IN 20140729)].
 
 ##Updates##
 
@@ -34,6 +34,9 @@ This project is developed under Ubuntu 12.04.3 and Mac OS X.
 6. General Refinement of DeSTIN architecture is updated [2014-06-21]
 7. CIFAR classification example sketch [2014-06-22]
 8. Revised contrast normalisation and whitening [2014-06-23]
+9. CIFAR classification on complete set [2014-07-29]
+10. Nao action learning update (up to 9 scenes) [2014-08-04]
+11. Destina Python support by SWIG [2014-08-09]
 
 ##Setup##
 
@@ -66,6 +69,8 @@ This project is developed under Ubuntu 12.04.3 and Mac OS X.
        README.md
        /resources
        /src
+       /Python
+       /swig_destina_common.i
        update-all.sh
    ```
 

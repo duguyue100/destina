@@ -94,6 +94,8 @@ This project is developed under Ubuntu 12.04.3 and Mac OS X.
 
 6. Image Reconstruction indicated that this implementation is performed OK on average. So that if we only employ first layer's learning result, it should still give us state-of-art performance with a plain autoencoder. [2014-06-22]
 
+7. This is the major updates since the last one. In this version, Python support by SWIG is added. And now the Python library can be accessed under `/build/Python`. During this duration, I tested current implementation on complete CIFAR-10 dataset several times. By using different settings and pre-processings. With plain DeSTIN hierarchy, it is __not__ capable to effectively classify images in tiny images. Basically, I conducted my experiments on most of set objectives. Surprisingly, when we apply DeSTIN to Robot behaviour learning studies, it shows some positive results (later will extend this work to sequence behaviour learning). Currently, it can differentiate up to 9 scenes around the environment. With some proper training, it can also be extend to some larger number of scenes. This seems revealing the potentials of limited scene recognition. [2014-08-10]
+
 ##Contacts##
 
 Hu Yuhuang
